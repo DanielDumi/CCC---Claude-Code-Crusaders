@@ -24,3 +24,5 @@ python -m uvicorn backend.api:app --host 0.0.0.0 --port $PORT
 ```
 
 The same command works on any Python host (Render, a VM). Set the model settings (`LLM_MODE`, `AWS_BEARER_TOKEN_BEDROCK`, `AWS_REGION`, `BEDROCK_MODEL_ID`, `LLM_SPEND_CAP_USD`) as environment variables on the host, never in the repo. The key stays on the server: the browser never receives it.
+
+The live demo runs this way on Render: <https://ccc-claude-code-crusaders.onrender.com/>.
