@@ -1,0 +1,101 @@
+{
+  "title": "Conflicting financial report versions",
+  "synthetic": true,
+  "case": {
+    "origin": "AI_AGENT",
+    "case_id": "CASE-DEMO-004",
+    "purpose": "corporate_due_diligence_demo",
+    "subject": {
+      "type": "LEGAL_ENTITY",
+      "display_name": "NOVA Logistics SRL",
+      "reference_id": "RO-DEMO-48219370",
+      "jurisdiction": "RO"
+    },
+    "origin_system": {
+      "system_id": "SIMULATED-BANK-AGENT",
+      "version": "demo-1.0",
+      "ai_act_risk_classification": "UNCONFIRMED",
+      "provider_deployer_role": "UNCONFIRMED"
+    },
+    "raw_finding": "NOVA Logistics SRL reported 2025 revenue of EUR 2,400,000.",
+    "initial_evidence_ids": [
+      "EVD-FIN-2025-V1",
+      "EVD-FIN-2025-V2"
+    ],
+    "original_execution_trace_status": "PARTIALLY_CAPTURED",
+    "reviewer_id": "demo-reviewer-01",
+    "scenario_id": "S04"
+  },
+  "initial_evidence": [
+    {
+      "evidence_id": "EVD-FIN-2025-V1",
+      "source_type": "ORIGINAL_CASE_ARTIFACT",
+      "source_ref": "demo://documents/FIN-2025-v1",
+      "document_id": "FIN-2025-v1",
+      "published_at": "2026-03-01T00:00:00Z",
+      "original_excerpt": "Revenue 2025: EUR 2,400,000",
+      "fields": {
+        "revenue_eur": 2400000,
+        "year": 2025
+      },
+      "data_categories": [
+        "CORPORATE_FINANCIAL"
+      ]
+    },
+    {
+      "evidence_id": "EVD-FIN-2025-V2",
+      "source_type": "ORIGINAL_CASE_ARTIFACT",
+      "source_ref": "demo://documents/FIN-2025-v2",
+      "document_id": "FIN-2025-v2",
+      "published_at": "2026-03-20T00:00:00Z",
+      "original_excerpt": "Revenue 2025: EUR 2,100,000",
+      "fields": {
+        "revenue_eur": 2100000,
+        "year": 2025
+      },
+      "data_categories": [
+        "CORPORATE_FINANCIAL"
+      ]
+    }
+  ],
+  "mock_claims": [
+    {
+      "claim_text": "NOVA Logistics SRL's 2025 revenue was EUR 2,400,000.",
+      "temporal_scope": "HISTORICAL",
+      "check_type": "VERSIONED_FIGURE",
+      "required_evidence": [
+        "approved_document_version"
+      ],
+      "params": {
+        "field": "revenue_eur",
+        "asserted_value": 2400000,
+        "document_ids": [
+          "FIN-2025-v1",
+          "FIN-2025-v2"
+        ]
+      }
+    }
+  ],
+  "tool_data": {
+    "document_metadata_lookup": {
+      "FIN-2025-v1": {
+        "document_id": "FIN-2025-v1",
+        "version": 1,
+        "approved_version": null,
+        "uploaded_at": "2026-03-01"
+      },
+      "FIN-2025-v2": {
+        "document_id": "FIN-2025-v2",
+        "version": 2,
+        "approved_version": null,
+        "uploaded_at": "2026-03-20"
+      }
+    }
+  },
+  "ground_truth": {
+    "verdicts": [
+      "INSUFFICIENT_EVIDENCE"
+    ],
+    "closure": "CLOSED_UNRESOLVED"
+  }
+}

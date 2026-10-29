@@ -1,0 +1,8 @@
+fastapi>=0.110
+uvicorn>=0.27
+pydantic>=2.5
+pyyaml>=6.0
+httpx>=0.27
+pytest>=8.0
+holidays>=0.60
+certifi>=2024.2.2

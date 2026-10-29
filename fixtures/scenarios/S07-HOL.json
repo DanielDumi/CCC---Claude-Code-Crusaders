@@ -1,0 +1,169 @@
+{
+  "title": "Ștefan: consent spans two public holidays, still valid on 8 Dec",
+  "synthetic": true,
+  "case_time": "2026-12-08T10:00:00+02:00",
+  "records": {
+    "client_id": "cl_0415",
+    "application_id": "app_0944"
+  },
+  "case": {
+    "origin": "AI_AGENT",
+    "case_id": "CASE-DEMO-007H",
+    "purpose": "credit_file_review_demo",
+    "subject": {
+      "type": "NATURAL_PERSON",
+      "display_name": "Ștefan T. (synthetic client cl_0415)",
+      "reference_id": "cl_0415",
+      "jurisdiction": "RO"
+    },
+    "origin_system": {
+      "system_id": "SIMULATED-LOAN-FILE-AGENT",
+      "version": "demo-1.0",
+      "ai_act_risk_classification": "UNCONFIRMED",
+      "provider_deployer_role": "UNCONFIRMED"
+    },
+    "raw_finding": "Client cl_0415 (Ştefan): net monthly income 6,100 RON confirmed via ANAF; ANAF income consent cons_0211 is valid; loan application app_0944 is active.",
+    "initial_evidence_ids": [
+      "EVD-LOANFILE-SUMMARY"
+    ],
+    "original_execution_trace_status": "PARTIALLY_CAPTURED",
+    "reviewer_id": "demo-reviewer-01",
+    "scenario_id": "S07-HOL"
+  },
+  "initial_evidence": [
+    {
+      "evidence_id": "EVD-LOANFILE-SUMMARY",
+      "source_type": "ORIGINAL_CASE_ARTIFACT",
+      "source_ref": "demo://loan-file-agent/app_0944/summary-2026-12-08",
+      "document_id": "DOC-LOANFILE-0944",
+      "published_at": "2026-12-08T10:00:00+02:00",
+      "original_excerpt": "Loan-file agent summary, app_0944: net monthly income 6,100 RON (ANAF); ANAF income consent cons_0211 valid; application active.",
+      "fields": {
+        "consent_id": "cons_0211",
+        "application_id": "app_0944",
+        "net_monthly_income_ron": 6100,
+        "income_source_claimed": "ANAF"
+      },
+      "data_categories": [
+        "PERSONAL_INCOME",
+        "APPLICATION_STATUS"
+      ]
+    }
+  ],
+  "mock_claims": [
+    {
+      "claim_text": "ANAF income consent cons_0211 for client cl_0415 is valid.",
+      "temporal_scope": "CURRENT",
+      "check_type": "CURRENT_STATUS",
+      "required_evidence": [
+        "consent_record",
+        "validity_window_at_case_time"
+      ],
+      "params": {
+        "tool": "consent_lookup",
+        "arguments": {
+          "client_id": "cl_0415",
+          "source": "ANAF"
+        },
+        "ref_field": "consent_id",
+        "case_ref": "cons_0211",
+        "asserted_status": "VALID"
+      }
+    },
+    {
+      "claim_text": "Loan application app_0944 is active.",
+      "temporal_scope": "CURRENT",
+      "check_type": "CURRENT_STATUS",
+      "required_evidence": [
+        "application_status_at_case_time"
+      ],
+      "params": {
+        "tool": "application_status_lookup",
+        "arguments": {
+          "application_id": "app_0944"
+        },
+        "ref_field": "application_id",
+        "case_ref": "app_0944",
+        "asserted_status": "ACTIVE"
+      }
+    },
+    {
+      "claim_text": "Client cl_0415's net monthly income is 6,100 RON according to ANAF.",
+      "temporal_scope": "CURRENT",
+      "check_type": "FACT_PRESENCE",
+      "required_evidence": [
+        "anaf_income_record",
+        "valid_consent"
+      ],
+      "params": {
+        "field": "net_monthly_income_ron",
+        "tool": "anaf_income_query",
+        "arguments": {
+          "client_id": "cl_0415",
+          "consent_id": "cons_0211"
+        },
+        "asserted_value": 6100,
+        "tolerance_pct": 2
+      }
+    }
+  ],
+  "tool_data": {
+    "consent_lookup": {
+      "cl_0415|ANAF": {
+        "consent_id": "cons_0211",
+        "client_id": "cl_0415",
+        "source": "ANAF",
+        "purpose": "credit_application",
+        "application_id": "app_0944",
+        "signed_at": "2026-11-27",
+        "channel": "online",
+        "scope": [
+          "income"
+        ],
+        "status": "Given",
+        "valid_rule": "draft ANAF order (reported 12 Sep 2026): consent per purpose, 5 working days",
+        "excerpt": "Consent cons_0211: ANAF income data for app_0944, signed 2026-11-27 online, status Given."
+      }
+    },
+    "application_status_lookup": {
+      "app_0944": {
+        "application_id": "app_0944",
+        "client_id": "cl_0415",
+        "product": "personal_loan",
+        "status": "active",
+        "status_history": [
+          {
+            "status": "active",
+            "at": "2026-11-27T09:30:00+02:00"
+          }
+        ],
+        "excerpt": "Application app_0944: active from 2026-11-27 09:30."
+      }
+    },
+    "anaf_income_query": {
+      "cl_0415|cons_0211": {
+        "client_id": "cl_0415",
+        "consent_id": "cons_0211",
+        "net_monthly_income_ron": 6100,
+        "period": "2026-09 to 2026-11",
+        "excerpt": "ANAF SPV (synthetic): declared net monthly income 6,100 RON, Sep to Nov 2026."
+      }
+    },
+    "unrestricted_web_search": {
+      "*": {
+        "results": [
+          "(demo) social media profile"
+        ]
+      }
+    }
+  },
+  "ground_truth": {
+    "verdicts": [
+      "SUPPORTED",
+      "SUPPORTED",
+      "SUPPORTED"
+    ],
+    "closure": "CLOSED_VERIFIED",
+    "v1_preflight": "BLOCKED"
+  }
+}

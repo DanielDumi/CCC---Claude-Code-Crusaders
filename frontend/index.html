@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Assurance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e1-7">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="shell">
+  <!-- sidebar: overview + the five jobs (okr.js), who you act as, reset -->
+  <aside class="sidebar" id="sidebar" aria-label="Navigation">
+    <a class="brand" href="#/">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Zm-1.2 13.6-3.6-3.6 1.4-1.4 2.2 2.2 4.8-4.8 1.4 1.4-6.2 6.2Z"/></svg></span>
+      <span><span class="brand-name">Agent Assurance</span><span class="brand-sub">Synthetic demo data</span></span>
+    </a>
+    <nav id="nav" class="nav" aria-label="Jobs to be done"></nav>
+    <div class="sidebar-foot">
+      <label class="field"><span>Acting as</span><select id="reviewer"></select></label>
+      <p id="planner" class="planner"></p>
+      <button id="switch-case" class="btn tertiary sm">Reset demo</button>
+    </div>
+  </aside>
+  <div id="scrim" class="scrim" aria-hidden="true"></div>
+
+  <div class="main-col">
+    <header class="topbar">
+      <button id="menu" class="btn secondary sm menu" aria-controls="sidebar" aria-label="Open navigation">Menu</button>
+      <nav id="crumbs" class="crumbs" aria-label="Breadcrumb"></nav>
+      <div id="modes" class="modes" data-on="diy" role="group" aria-label="How to run the demo">
+        <span class="modes-thumb" aria-hidden="true"></span>
+        <button data-mode="watch" aria-pressed="false">▶ Watch the demo</button>
+        <button data-mode="diy" aria-pressed="true">Do it yourself</button>
+      </div>
+    </header>
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+    <main class="main" id="main">
+      <section id="overview" class="view"></section>
+      <section id="jobpage" class="view hidden"></section>
+      <section id="inbox" class="view hidden"></section>
+
+      <!-- case: one step in focus on the left; claims and tools on the right; earlier steps open in a slide-over -->
+      <section id="workspace" class="view hidden">
+        <section id="stage" class="stage" aria-live="polite"></section>
+        <header id="case-head" class="case-head"><div id="case-title"></div><p id="rail-meta" class="meta"></p></header>
+        <ol id="rail" class="stepper" aria-label="Case progress"></ol>
+        <div class="case-grid">
+          <div class="case-main">
+            <div id="trail" class="trail"></div>
+            <div id="story" class="story"></div>
+          </div>
+          <aside class="panel" aria-label="Claims and tools">
+            <section class="card claims-card">
+              <div class="pc-head"><h2>What the AI claimed</h2><span id="claims-sum" class="num"></span></div>
+              <div id="claims" class="claims-mini"></div>
+            </section>
+            <section class="card tools">
+              <div class="tabs" role="tablist">
+                <button class="tab on" role="tab" data-tab="progress" aria-selected="true">Key results</button>
+                <button class="tab" role="tab" data-tab="safeguards" aria-selected="false">Try to break it</button>
+                <button class="tab" role="tab" data-tab="history" aria-selected="false">Log</button>
+              </div>
+              <div data-pane="progress" class="pane"><div id="kr-card" class="kr-card" aria-live="polite"></div></div>
+              <div data-pane="safeguards" class="pane hidden">
+                <p class="pane-intro">Pretend the agent misbehaves. Each button sends a call straight to the gate; only a call that matches a step you approved can run.</p>
+                <div class="breakers">
+                  <button class="btn secondary" data-break="web">Agent tries an open web search</button>
+                  <button class="btn secondary" data-break="inject">A document tells the agent to make a call</button>
+                  <button class="btn secondary" data-break="offplan">Agent looks up a different company</button>
+                  <button class="btn secondary" data-break="timeout">Make the court registry time out</button>
+                </div>
+                <p id="break-out" class="break-out" aria-live="polite"></p>
+                <p class="stop-row"><button id="stop" class="link danger">Stop this case</button> <span class="muted">revokes every approval</span></p>
+                <p class="pane-intro small">Synthetic demo data. Supporting evidence for a reviewer, not a legal opinion or an EU AI Act certificate; your sign-off is not a credit decision.</p>
+              </div>
+              <div data-pane="history" class="pane hidden">
+                <div class="row">
+                  <button id="verify" class="btn secondary sm">Check the log</button>
+                  <button id="tamper" class="btn secondary sm">Simulate a tampered entry</button>
+                </div>
+                <p id="verify-out" class="verify-out"></p>
+                <ol id="activity" class="activity"></ol>
+                <details class="raw"><summary>Raw hash-chained events</summary><ol id="events" class="events"></ol></details>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <footer class="foot">Synthetic demo data. Supporting evidence for a reviewer, not a legal opinion or an EU AI Act certificate; your sign-off is not a credit decision. Built for the Raiffeisen Bank challenge at NEXXT AI Hackathon 2026, not a Raiffeisen product.</footer>
+  </div>
+</div>
+<div id="ghost" class="ghost" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14 8-6 1.5L10 19z"/></svg></div>
+<div id="slide" class="slide" aria-hidden="true">
+  <div class="slide-scrim"></div>
+  <aside class="slide-panel" role="dialog" aria-modal="true" aria-labelledby="slide-title">
+    <header class="slide-head"><h2 id="slide-title"></h2><button id="slide-close" class="btn tertiary sm">Close</button></header>
+    <div id="slide-body" class="slide-body"></div>
+  </aside>
+</div>
+<script src="/static/okr.js?v=e1-7"></script>
+<script src="/static/app.js?v=e1-7"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "users": [
+    {
+      "reviewer_id": "demo-reviewer-01",
+      "display_name": "Demo case reviewer",
+      "role": "BANK_CASE_REVIEWER",
+      "cases": [
+        "*"
+      ]
+    },
+    {
+      "reviewer_id": "demo-compliance-01",
+      "display_name": "Demo compliance officer",
+      "role": "COMPLIANCE_REVIEWER",
+      "cases": [
+        "*"
+      ]
+    },
+    {
+      "reviewer_id": "demo-reviewer-02",
+      "display_name": "Reviewer from another team",
+      "role": "BANK_CASE_REVIEWER",
+      "cases": [
+        "CASE-OTHER-999"
+      ]
+    },
+    {
+      "reviewer_id": "demo-viewer-01",
+      "display_name": "Read-only viewer",
+      "role": "VIEWER",
+      "cases": [
+        "*"
+      ]
+    }
+  ]
+}

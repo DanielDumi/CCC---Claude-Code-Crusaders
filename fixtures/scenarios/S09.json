@@ -1,0 +1,67 @@
+{
+  "title": "Purpose not approved: compliance must decide",
+  "synthetic": true,
+  "case": {
+    "origin": "AI_AGENT",
+    "case_id": "CASE-DEMO-009",
+    "purpose": "marketing_profiling",
+    "subject": {
+      "type": "LEGAL_ENTITY",
+      "display_name": "NOVA Logistics SRL",
+      "reference_id": "RO-DEMO-48219370",
+      "jurisdiction": "RO"
+    },
+    "origin_system": {
+      "system_id": "SIMULATED-BANK-AGENT",
+      "version": "demo-1.0",
+      "ai_act_risk_classification": "UNCONFIRMED",
+      "provider_deployer_role": "UNCONFIRMED"
+    },
+    "raw_finding": "NOVA Logistics SRL's revenue fell by 20% from 2024 to 2025.",
+    "initial_evidence_ids": [],
+    "original_execution_trace_status": "PARTIALLY_CAPTURED",
+    "reviewer_id": "demo-reviewer-01",
+    "scenario_id": "S09"
+  },
+  "initial_evidence": [],
+  "mock_claims": [
+    {
+      "claim_text": "Revenue fell 20% year-over-year from 2024 to 2025.",
+      "temporal_scope": "HISTORICAL",
+      "check_type": "CALCULATION",
+      "required_evidence": [
+        "revenue_2024",
+        "revenue_2025"
+      ],
+      "params": {
+        "field": "revenue_eur",
+        "from_year": 2024,
+        "to_year": 2025,
+        "asserted_change_pct": -20.0
+      }
+    }
+  ],
+  "tool_data": {
+    "financial_report_lookup": {
+      "RO-DEMO-48219370|2024": {
+        "document_id": "FIN-2024",
+        "year": 2024,
+        "revenue_eur": 5000000,
+        "published_at": "2025-04-30T00:00:00Z"
+      },
+      "RO-DEMO-48219370|2025": {
+        "document_id": "FIN-2025",
+        "year": 2025,
+        "revenue_eur": 4000000,
+        "published_at": "2026-04-30T00:00:00Z"
+      }
+    }
+  },
+  "ground_truth": {
+    "verdicts": [
+      "NOT_CHECKED"
+    ],
+    "closure": "CLOSED_UNRESOLVED",
+    "v1_preflight": "LEGAL_REVIEW_REQUIRED"
+  }
+}

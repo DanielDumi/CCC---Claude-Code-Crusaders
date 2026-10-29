@@ -1,0 +1,1352 @@
+{
+  "schema_version": "1.0",
+  "pack_id": "PACK-CASE-DEMO-001",
+  "case_id": "CASE-DEMO-001",
+  "closure_state": "CLOSED_WITH_ISSUES",
+  "subject": {
+    "type": "LEGAL_ENTITY",
+    "display_name": "NOVA Logistics SRL",
+    "reference_id": "RO-DEMO-48219370",
+    "jurisdiction": "RO"
+  },
+  "purpose": "corporate_due_diligence_demo",
+  "origin": "AI_AGENT",
+  "origin_system": {
+    "system_id": "SIMULATED-BANK-AGENT",
+    "version": "demo-1.0",
+    "ai_act_risk_classification": "UNCONFIRMED",
+    "provider_deployer_role": "UNCONFIRMED"
+  },
+  "raw_finding": "NOVA Logistics SRL is currently involved in an ongoing legal dispute (case C-001).",
+  "raw_finding_sha256": "d4b491ff18a8085ea882350a0ea60a8b3c0bfc2e4ef50c2d1a188aa1dc6bba92",
+  "original_artifact_refs": [
+    "EVD-OLD-ARTICLE"
+  ],
+  "claims": [
+    {
+      "claim_id": "CL-001",
+      "case_id": "CASE-DEMO-001",
+      "claim_text": "A legal dispute involving NOVA Logistics SRL (case C-001) existed in 2024.",
+      "temporal_scope": "HISTORICAL",
+      "source_claim_origin": "ORIGINAL_AGENT_OUTPUT",
+      "required_evidence": [
+        "matching_entity_id",
+        "document_publication_date"
+      ],
+      "check_type": "HISTORICAL_EVENT",
+      "params": {
+        "case_ref": "C-001",
+        "period_year": 2024
+      },
+      "gaps": [
+        "identity_not_verified"
+      ]
+    },
+    {
+      "claim_id": "CL-002",
+      "case_id": "CASE-DEMO-001",
+      "claim_text": "That same dispute (case C-001) is ongoing as of October 2026.",
+      "temporal_scope": "CURRENT",
+      "source_claim_origin": "ORIGINAL_AGENT_OUTPUT",
+      "required_evidence": [
+        "same_case_reference",
+        "current_authorized_status"
+      ],
+      "check_type": "CURRENT_STATUS",
+      "params": {
+        "asserted_status": "OPEN",
+        "case_ref": "C-001"
+      },
+      "gaps": [
+        "current_status_not_established"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "FND-CL-001",
+      "claim_id": "CL-001",
+      "verdict": "SUPPORTED",
+      "supporting_evidence_ids": [
+        "EVD-OLD-ARTICLE",
+        "EVD-001"
+      ],
+      "contradicting_evidence_ids": [],
+      "reason": "demo://news-archive/2024-03-14/nova (2024-03-14) reports case C-001; registry confirms NOVA Logistics SRL = RO-DEMO-48219370.",
+      "reason_codes": [
+        "source_supports",
+        "identity_confirmed"
+      ],
+      "authenticity_limitations": [
+        "Historical source; says nothing about the current status"
+      ],
+      "requires_human_review": true,
+      "next_action_proposal": null,
+      "explanation": null
+    },
+    {
+      "finding_id": "FND-CL-002",
+      "claim_id": "CL-002",
+      "verdict": "CONTRADICTED",
+      "supporting_evidence_ids": [
+        "EVD-OLD-ARTICLE"
+      ],
+      "contradicting_evidence_ids": [
+        "EVD-002",
+        "EVD-003"
+      ],
+      "reason": "demo://licensed-legal-registry: case C-001 is CLOSED since 2026-09-03; the claim says OPEN. The older source supports only the historical claim.",
+      "reason_codes": [
+        "source_contradicts",
+        "stale_original_source"
+      ],
+      "authenticity_limitations": [
+        "Signature check is a SIMULATED fixture, not a qualified e-signature validation"
+      ],
+      "requires_human_review": true,
+      "next_action_proposal": null,
+      "explanation": null
+    }
+  ],
+  "plans": [
+    {
+      "plan_id": "PLAN-CASE-DEMO-001-v1",
+      "case_id": "CASE-DEMO-001",
+      "version": 1,
+      "plan_hash": "50bf6b5c63bd5cede91a6660e4d297252771c3e105eab309eda4db72ea8ec111",
+      "created_by": "INVESTIGATION_AGENT (mock)",
+      "objective": "Verify: A legal dispute involving NOVA Logistics SRL (case C-001) existed in 2024. | That same dispute (case C-001) is ongoing as of October 2026.",
+      "purpose": "corporate_due_diligence_demo",
+      "data_categories": [
+        "CORPORATE_LEGAL",
+        "CORPORATE_PUBLIC",
+        "PERSONAL_DATA"
+      ],
+      "source_allowlist": [
+        "demo://company-registry",
+        "demo://licensed-legal-registry",
+        "web://*"
+      ],
+      "forbidden_tools": [],
+      "reviewer_restrictions": [],
+      "global_max_tool_calls": 8,
+      "expires_at": "2026-10-29T07:35:05Z",
+      "rationale": "3 read-only checks proposed to settle each claim with an original, identifiable source.",
+      "steps": [
+        {
+          "step_id": "S1",
+          "claim_ids": [
+            "CL-001",
+            "CL-002"
+          ],
+          "objective": "Check legal-entity identifier",
+          "tool_id": "company_registry_lookup",
+          "action": "READ",
+          "arguments": {
+            "company_id": "RO-DEMO-48219370"
+          },
+          "allowed_source_ref": "demo://company-registry",
+          "data_categories": [
+            "CORPORATE_PUBLIC"
+          ],
+          "max_calls": 1,
+          "depends_on": [],
+          "expected_evidence": "entity ID and registration metadata"
+        },
+        {
+          "step_id": "S2",
+          "claim_ids": [
+            "CL-002"
+          ],
+          "objective": "Verify current status of case C-001",
+          "tool_id": "legal_case_status_lookup",
+          "action": "READ",
+          "arguments": {
+            "case_ref": "C-001",
+            "company_id": "RO-DEMO-48219370"
+          },
+          "allowed_source_ref": "demo://licensed-legal-registry",
+          "data_categories": [
+            "CORPORATE_LEGAL"
+          ],
+          "max_calls": 1,
+          "depends_on": [
+            "S1"
+          ],
+          "expected_evidence": "dated case status"
+        },
+        {
+          "step_id": "S3",
+          "claim_ids": [
+            "CL-002"
+          ],
+          "objective": "Broad web search for recent coverage",
+          "tool_id": "unrestricted_web_search",
+          "action": "READ",
+          "arguments": {
+            "query": "NOVA Logistics SRL lawsuit latest news"
+          },
+          "allowed_source_ref": "web://*",
+          "data_categories": [
+            "PERSONAL_DATA"
+          ],
+          "max_calls": 1,
+          "depends_on": [],
+          "expected_evidence": "news articles"
+        }
+      ],
+      "supersedes": null,
+      "status": "SUPERSEDED"
+    },
+    {
+      "plan_id": "PLAN-CASE-DEMO-001-v2",
+      "case_id": "CASE-DEMO-001",
+      "version": 2,
+      "plan_hash": "b9be2f93cbc616bf86b03e2de701df34710d5d20bd1e1743d02f647244735204",
+      "created_by": "INVESTIGATION_AGENT (mock)",
+      "objective": "Verify: A legal dispute involving NOVA Logistics SRL (case C-001) existed in 2024. | That same dispute (case C-001) is ongoing as of October 2026.",
+      "purpose": "corporate_due_diligence_demo",
+      "data_categories": [
+        "CORPORATE_LEGAL",
+        "CORPORATE_PUBLIC"
+      ],
+      "source_allowlist": [
+        "demo://company-registry",
+        "demo://licensed-legal-registry"
+      ],
+      "forbidden_tools": [
+        "unrestricted_web_search"
+      ],
+      "reviewer_restrictions": [
+        "Only the company registry and the licensed court registry.",
+        "Excluded by reviewer: unrestricted_web_search"
+      ],
+      "global_max_tool_calls": 8,
+      "expires_at": "2026-10-29T07:35:05Z",
+      "rationale": "2 read-only checks proposed to settle each claim with an original, identifiable source.",
+      "steps": [
+        {
+          "step_id": "S1",
+          "claim_ids": [
+            "CL-001",
+            "CL-002"
+          ],
+          "objective": "Check legal-entity identifier",
+          "tool_id": "company_registry_lookup",
+          "action": "READ",
+          "arguments": {
+            "company_id": "RO-DEMO-48219370"
+          },
+          "allowed_source_ref": "demo://company-registry",
+          "data_categories": [
+            "CORPORATE_PUBLIC"
+          ],
+          "max_calls": 1,
+          "depends_on": [],
+          "expected_evidence": "entity ID and registration metadata"
+        },
+        {
+          "step_id": "S2",
+          "claim_ids": [
+            "CL-002"
+          ],
+          "objective": "Verify current status of case C-001",
+          "tool_id": "legal_case_status_lookup",
+          "action": "READ",
+          "arguments": {
+            "case_ref": "C-001",
+            "company_id": "RO-DEMO-48219370"
+          },
+          "allowed_source_ref": "demo://licensed-legal-registry",
+          "data_categories": [
+            "CORPORATE_LEGAL"
+          ],
+          "max_calls": 1,
+          "depends_on": [
+            "S1"
+          ],
+          "expected_evidence": "dated case status"
+        }
+      ],
+      "supersedes": "PLAN-CASE-DEMO-001-v1",
+      "status": "APPROVED"
+    },
+    {
+      "plan_id": "PLAN-CASE-DEMO-001-v3",
+      "case_id": "CASE-DEMO-001",
+      "version": 3,
+      "plan_hash": "c384de03a6e09c921dfcc4f8d130d33eb0fcdb0d207345095d68208339b61566",
+      "created_by": "INVESTIGATION_AGENT (mock)",
+      "objective": "Close remaining evidence gaps: document_signature_check:DOC-CASE-2026",
+      "purpose": "corporate_due_diligence_demo",
+      "data_categories": [
+        "DOCUMENT_METADATA"
+      ],
+      "source_allowlist": [
+        "demo://documents"
+      ],
+      "forbidden_tools": [
+        "unrestricted_web_search"
+      ],
+      "reviewer_restrictions": [
+        "Only the company registry and the licensed court registry.",
+        "Excluded by reviewer: unrestricted_web_search"
+      ],
+      "global_max_tool_calls": 8,
+      "expires_at": "2026-10-29T07:35:05Z",
+      "rationale": "The newer record settles the claim, but nobody has checked that the record itself is genuine. The agent proposes one more read-only check. It's a new step, so it needs a new policy check and your approval.",
+      "steps": [
+        {
+          "step_id": "S1",
+          "claim_ids": [
+            "CL-002"
+          ],
+          "objective": "Check authenticity of DOC-CASE-2026 before relying on it",
+          "tool_id": "document_signature_check",
+          "action": "READ",
+          "arguments": {
+            "document_id": "DOC-CASE-2026"
+          },
+          "allowed_source_ref": "demo://documents",
+          "data_categories": [
+            "DOCUMENT_METADATA"
+          ],
+          "max_calls": 1,
+          "depends_on": [],
+          "expected_evidence": "signature metadata match"
+        }
+      ],
+      "supersedes": "PLAN-CASE-DEMO-001-v2",
+      "status": "APPROVED"
+    }
+  ],
+  "preflights": [
+    {
+      "preflight_id": "PREF-001",
+      "plan_id": "PLAN-CASE-DEMO-001-v1",
+      "plan_hash": "50bf6b5c63bd5cede91a6660e4d297252771c3e105eab309eda4db72ea8ec111",
+      "policy_version": "demo-policy-2026-10-28-v2",
+      "legal_reference_snapshot": "eu-ai-act-2026-07-27",
+      "status": "BLOCKED",
+      "checks": [
+        {
+          "check_id": "PC-001",
+          "step_id": null,
+          "category": "CASE_PURPOSE",
+          "result": "PASS",
+          "rule_id": "POL-PURPOSE-001",
+          "explanation": "Purpose 'corporate_due_diligence_demo' approved."
+        },
+        {
+          "check_id": "PC-002",
+          "step_id": null,
+          "category": "BUDGET",
+          "result": "PASS",
+          "rule_id": "POL-BUDGET-001",
+          "explanation": "3 planned calls within budget (0/8 used)."
+        },
+        {
+          "check_id": "PC-003",
+          "step_id": "S1",
+          "category": "TOOL_ALLOWLIST",
+          "result": "PASS",
+          "rule_id": "POL-TOOL-001",
+          "explanation": "company_registry_lookup: read-only, CORPORATE_PUBLIC."
+        },
+        {
+          "check_id": "PC-004",
+          "step_id": "S2",
+          "category": "TOOL_ALLOWLIST",
+          "result": "PASS",
+          "rule_id": "POL-TOOL-001",
+          "explanation": "legal_case_status_lookup: read-only, CORPORATE_LEGAL."
+        },
+        {
+          "check_id": "PC-005",
+          "step_id": "S3",
+          "category": "TOOL_ALLOWLIST",
+          "result": "FAIL",
+          "rule_id": "POL-DATA-001",
+          "explanation": "unrestricted_web_search: No unrestricted people-search or open web search."
+        }
+      ],
+      "conditions": [],
+      "legal_review_required": false,
+      "ai_act_notes": [
+        {
+          "article": "Art. 12 logging",
+          "note": "Event ledger captures per-case events; applicability depends on the verified system's classification.",
+          "status": "NEEDS_LEGAL_CONFIRMATION"
+        },
+        {
+          "article": "Art. 14 human oversight",
+          "note": "Plan approval, reject/modify, stop and final sign-off are recorded.",
+          "status": "NEEDS_LEGAL_CONFIRMATION"
+        },
+        {
+          "article": "Art. 26 deployer duties",
+          "note": "Supporting evidence only; deployer compliance is not certified by this tool.",
+          "status": "NEEDS_LEGAL_CONFIRMATION"
+        }
+      ],
+      "checked_at": "2026-10-29T07:05:05Z"
+    },
+    {
+      "preflight_id": "PREF-002",
+      "plan_id": "PLAN-CASE-DEMO-001-v2",
+      "plan_hash": "b9be2f93cbc616bf86b03e2de701df34710d5d20bd1e1743d02f647244735204",
+      "policy_version": "demo-policy-2026-10-28-v2",
+      "legal_reference_snapshot": "eu-ai-act-2026-07-27",
+      "status": "ALLOWED_WITH_CONDITIONS",
+      "checks": [
+        {
+          "check_id": "PC-001",
+          "step_id": null,
+          "category": "CASE_PURPOSE",
+          "result": "PASS",
+          "rule_id": "POL-PURPOSE-001",
+          "explanation": "Purpose 'corporate_due_diligence_demo' approved."
+        },
+        {
+          "check_id": "PC-002",
+          "step_id": null,
+          "category": "BUDGET",
+          "result": "PASS",
+          "rule_id": "POL-BUDGET-001",
+          "explanation": "2 planned calls within budget (0/8 used)."
+        },
+        {
+          "check_id": "PC-003",
+          "step_id": "S1",
+          "category": "TOOL_ALLOWLIST",
+          "result": "PASS",
+          "rule_id": "POL-TOOL-001",
+          "explanation": "company_registry_lookup: read-only, CORPORATE_PUBLIC."
+        },
+        {
+          "check_id": "PC-004",
+          "step_id": "S2",
+          "category": "TOOL_ALLOWLIST",
+          "result": "PASS",
+          "rule_id": "POL-TOOL-001",
+          "explanation": "legal_case_status_lookup: read-only, CORPORATE_LEGAL."
+        },
+        {
+          "check_id": "PC-005",
+          "step_id": null,
+          "category": "GDPR_PERSONAL_DATA",
+          "result": "NOT_APPLICABLE",
+          "rule_id": "POL-DEMO-SYNTHETIC-ONLY",
+          "explanation": "Synthetic legal-entity fixtures only; no real personal data. Would need a lawful-basis reference in production."
+        }
+      ],
+      "conditions": [
+        "Read-only access",
+        "Exact company and case identifiers only",
+        "Only the company registry and the licensed court registry.",
+        "Excluded by reviewer: unrestricted_web_search"
+      ],
+      "legal_review_required": false,
+      "ai_act_notes": [
+        {
+          "article": "Art. 12 logging",
+          "note": "Event ledger captures per-case events; applicability depends on the verified system's classification.",
+          "status": "NEEDS_LEGAL_CONFIRMATION"
+        },
+        {
+          "article": "Art. 14 human oversight",
+          "note": "Plan approval, reject/modify, stop and final sign-off are recorded.",
+          "status": "NEEDS_LEGAL_CONFIRMATION"
+        },
+        {
+          "article": "Art. 26 deployer duties",
+          "note": "Supporting evidence only; deployer compliance is not certified by this tool.",
+          "status": "NEEDS_LEGAL_CONFIRMATION"
+        }
+      ],
+      "checked_at": "2026-10-29T07:05:05Z"
+    },
+    {
+      "preflight_id": "PREF-003",
+      "plan_id": "PLAN-CASE-DEMO-001-v3",
+      "plan_hash": "c384de03a6e09c921dfcc4f8d130d33eb0fcdb0d207345095d68208339b61566",
+      "policy_version": "demo-policy-2026-10-28-v2",
+      "legal_reference_snapshot": "eu-ai-act-2026-07-27",
+      "status": "ALLOWED_WITH_CONDITIONS",
+      "checks": [
+        {
+          "check_id": "PC-001",
+          "step_id": null,
+          "category": "CASE_PURPOSE",
+          "result": "PASS",
+          "rule_id": "POL-PURPOSE-001",
+          "explanation": "Purpose 'corporate_due_diligence_demo' approved."
+        },
+        {
+          "check_id": "PC-002",
+          "step_id": null,
+          "category": "BUDGET",
+          "result": "PASS",
+          "rule_id": "POL-BUDGET-001",
+          "explanation": "1 planned calls within budget (2/8 used)."
+        },
+        {
+          "check_id": "PC-003",
+          "step_id": "S1",
+          "category": "TOOL_ALLOWLIST",
+          "result": "PASS",
+          "rule_id": "POL-TOOL-001",
+          "explanation": "document_signature_check: read-only, DOCUMENT_METADATA."
+        },
+        {
+          "check_id": "PC-004",
+          "step_id": null,
+          "category": "GDPR_PERSONAL_DATA",
+          "result": "NOT_APPLICABLE",
+          "rule_id": "POL-DEMO-SYNTHETIC-ONLY",
+          "explanation": "Synthetic legal-entity fixtures only; no real personal data. Would need a lawful-basis reference in production."
+        }
+      ],
+      "conditions": [
+        "Simulated fixture signature check; not a qualified e-signature validation",
+        "Only the company registry and the licensed court registry.",
+        "Excluded by reviewer: unrestricted_web_search"
+      ],
+      "legal_review_required": false,
+      "ai_act_notes": [
+        {
+          "article": "Art. 12 logging",
+          "note": "Event ledger captures per-case events; applicability depends on the verified system's classification.",
+          "status": "NEEDS_LEGAL_CONFIRMATION"
+        },
+        {
+          "article": "Art. 14 human oversight",
+          "note": "Plan approval, reject/modify, stop and final sign-off are recorded.",
+          "status": "NEEDS_LEGAL_CONFIRMATION"
+        },
+        {
+          "article": "Art. 26 deployer duties",
+          "note": "Supporting evidence only; deployer compliance is not certified by this tool.",
+          "status": "NEEDS_LEGAL_CONFIRMATION"
+        }
+      ],
+      "checked_at": "2026-10-29T07:05:05Z"
+    }
+  ],
+  "approvals": [
+    {
+      "decision_id": "APR-001",
+      "plan_id": "PLAN-CASE-DEMO-001-v1",
+      "plan_hash": "50bf6b5c63bd5cede91a6660e4d297252771c3e105eab309eda4db72ea8ec111",
+      "preflight_id": "PREF-001",
+      "decision": "MODIFY",
+      "reviewer_id": "demo-reviewer-01",
+      "reviewer_role": "BANK_CASE_REVIEWER",
+      "restrictions": [
+        "Only the company registry and the licensed court registry.",
+        "Exclude unrestricted_web_search"
+      ],
+      "structured_restrictions": {
+        "forbid_tools": [
+          "unrestricted_web_search"
+        ],
+        "notes": [
+          "Only the company registry and the licensed court registry."
+        ]
+      },
+      "reason": "No open websites",
+      "decided_at": "2026-10-29T07:05:05Z",
+      "authorization_expires_at": null,
+      "revoked": false
+    },
+    {
+      "decision_id": "APR-002",
+      "plan_id": "PLAN-CASE-DEMO-001-v2",
+      "plan_hash": "b9be2f93cbc616bf86b03e2de701df34710d5d20bd1e1743d02f647244735204",
+      "preflight_id": "PREF-002",
+      "decision": "APPROVE",
+      "reviewer_id": "demo-reviewer-01",
+      "reviewer_role": "BANK_CASE_REVIEWER",
+      "restrictions": [],
+      "structured_restrictions": {},
+      "reason": "",
+      "decided_at": "2026-10-29T07:05:05Z",
+      "authorization_expires_at": "2026-10-29T07:35:05Z",
+      "revoked": false
+    },
+    {
+      "decision_id": "APR-003",
+      "plan_id": "PLAN-CASE-DEMO-001-v3",
+      "plan_hash": "c384de03a6e09c921dfcc4f8d130d33eb0fcdb0d207345095d68208339b61566",
+      "preflight_id": "PREF-003",
+      "decision": "APPROVE",
+      "reviewer_id": "demo-reviewer-01",
+      "reviewer_role": "BANK_CASE_REVIEWER",
+      "restrictions": [],
+      "structured_restrictions": {},
+      "reason": "",
+      "decided_at": "2026-10-29T07:05:05Z",
+      "authorization_expires_at": "2026-10-29T07:35:05Z",
+      "revoked": false
+    }
+  ],
+  "tool_receipts": [
+    {
+      "tool_receipt_id": "CALL-001",
+      "case_id": "CASE-DEMO-001",
+      "plan_id": "PLAN-CASE-DEMO-001-v2",
+      "step_id": "S1",
+      "tool_id": "unrestricted_web_search",
+      "arguments_hash": "ecd24fed4577faae6517c6d884030c22d05f35f86e47538d13cfbce7679d0e95",
+      "authorization_decision": "DENY",
+      "authorization_rule_ids": [
+        "POL-DATA-001",
+        "POL-TOOL-002",
+        "PLAN-001",
+        "PLAN-001",
+        "PLAN-003"
+      ],
+      "denial_reasons": [
+        "unrestricted_web_search is forbidden by policy (hard deny, cannot be approved)",
+        "unrestricted_web_search is not an enabled catalogue tool",
+        "Tool unrestricted_web_search does not match approved step S1 (company_registry_lookup)",
+        "Arguments differ from the approved step",
+        "unrestricted_web_search was excluded by the reviewer"
+      ],
+      "tool_call_status": "DENIED",
+      "invoked_at": null,
+      "completed_at": null,
+      "response_evidence_ids": [],
+      "response_digest": null,
+      "error": null
+    },
+    {
+      "tool_receipt_id": "CALL-002",
+      "case_id": "CASE-DEMO-001",
+      "plan_id": "PLAN-CASE-DEMO-001-v2",
+      "step_id": "S1",
+      "tool_id": "company_registry_lookup",
+      "arguments_hash": "14bcad4e2371f3c71b6a83adb49c666c6f4cc3be250872eea97d7ce05fb410e1",
+      "authorization_decision": "ALLOW",
+      "authorization_rule_ids": [
+        "POL-TOOL-001"
+      ],
+      "denial_reasons": [],
+      "tool_call_status": "EXECUTED",
+      "invoked_at": "2026-10-29T07:05:05Z",
+      "completed_at": "2026-10-29T07:05:05Z",
+      "response_evidence_ids": [
+        "EVD-001"
+      ],
+      "response_digest": "d12405d19fb1224f0a2ac01034d7f4716ddebd9101707d8c4617de8dcc8259e6",
+      "error": null
+    },
+    {
+      "tool_receipt_id": "CALL-003",
+      "case_id": "CASE-DEMO-001",
+      "plan_id": "PLAN-CASE-DEMO-001-v2",
+      "step_id": "S2",
+      "tool_id": "legal_case_status_lookup",
+      "arguments_hash": "c52cd1a2ce9cb1d8e7e15b004577cbd1baca51699ba1a58ba21ed25a4e8ed38e",
+      "authorization_decision": "ALLOW",
+      "authorization_rule_ids": [
+        "POL-TOOL-001"
+      ],
+      "denial_reasons": [],
+      "tool_call_status": "EXECUTED",
+      "invoked_at": "2026-10-29T07:05:05Z",
+      "completed_at": "2026-10-29T07:05:05Z",
+      "response_evidence_ids": [
+        "EVD-002"
+      ],
+      "response_digest": "2f0c6702b3084795227aa321802c5083e29ae62ccd7226e918dd79b9c644481a",
+      "error": null
+    },
+    {
+      "tool_receipt_id": "CALL-004",
+      "case_id": "CASE-DEMO-001",
+      "plan_id": "PLAN-CASE-DEMO-001-v3",
+      "step_id": "S1",
+      "tool_id": "document_signature_check",
+      "arguments_hash": "cdb7e247aaf55ff10ea709201c4036549261880fe81f6a4b6fa05c1d20af31a4",
+      "authorization_decision": "ALLOW",
+      "authorization_rule_ids": [
+        "POL-TOOL-001"
+      ],
+      "denial_reasons": [],
+      "tool_call_status": "EXECUTED",
+      "invoked_at": "2026-10-29T07:05:05Z",
+      "completed_at": "2026-10-29T07:05:05Z",
+      "response_evidence_ids": [
+        "EVD-003"
+      ],
+      "response_digest": "654db60a17c6cbd1026b9e5b7e1a691102845f7256eb98ad92ba37159e688146",
+      "error": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EVD-OLD-ARTICLE",
+      "case_id": "CASE-DEMO-001",
+      "source_type": "ORIGINAL_CASE_ARTIFACT",
+      "source_ref": "demo://news-archive/2024-03-14/nova",
+      "tool_receipt_id": null,
+      "document_id": "DOC-ART-2024",
+      "entity_id": null,
+      "published_at": "2024-03-14T08:00:00Z",
+      "retrieved_at": "2026-10-29T07:05:05Z",
+      "content_sha256": "5cd215f12274f7cfda23103533a18cfb94d7d0e7cd38b0283864402d2bdbc7de",
+      "data_categories": [
+        "CORPORATE_LEGAL"
+      ],
+      "status": "AVAILABLE",
+      "original_excerpt": "NOVA Logistics SRL was involved in an open dispute, case C-001.",
+      "fields": {
+        "case_ref": "C-001",
+        "mentions_entity_name": "NOVA Logistics SRL",
+        "status": "OPEN"
+      },
+      "authenticity_verification": "NOT_VERIFIED",
+      "authorized_for_case": true,
+      "untrusted_instruction_detected": false
+    },
+    {
+      "evidence_id": "EVD-001",
+      "case_id": "CASE-DEMO-001",
+      "source_type": "AUTHORIZED_MCP_FIXTURE",
+      "source_ref": "demo://company-registry",
+      "tool_receipt_id": "CALL-002",
+      "document_id": null,
+      "entity_id": "RO-DEMO-48219370",
+      "published_at": null,
+      "retrieved_at": "2026-10-29T07:05:05Z",
+      "content_sha256": "d12405d19fb1224f0a2ac01034d7f4716ddebd9101707d8c4617de8dcc8259e6",
+      "data_categories": [
+        "CORPORATE_PUBLIC"
+      ],
+      "status": "AVAILABLE",
+      "original_excerpt": null,
+      "fields": {
+        "entity_id": "RO-DEMO-48219370",
+        "jurisdiction": "RO",
+        "legal_name": "NOVA Logistics SRL",
+        "registered_at": "2015-04-02",
+        "status": "ACTIVE",
+        "tool_id": "company_registry_lookup"
+      },
+      "authenticity_verification": "NOT_VERIFIED",
+      "authorized_for_case": true,
+      "untrusted_instruction_detected": false
+    },
+    {
+      "evidence_id": "EVD-002",
+      "case_id": "CASE-DEMO-001",
+      "source_type": "AUTHORIZED_MCP_FIXTURE",
+      "source_ref": "demo://licensed-legal-registry",
+      "tool_receipt_id": "CALL-003",
+      "document_id": "DOC-CASE-2026",
+      "entity_id": "RO-DEMO-48219370",
+      "published_at": "2026-09-03T10:00:00Z",
+      "retrieved_at": "2026-10-29T07:05:05Z",
+      "content_sha256": "2f0c6702b3084795227aa321802c5083e29ae62ccd7226e918dd79b9c644481a",
+      "data_categories": [
+        "CORPORATE_LEGAL"
+      ],
+      "status": "AVAILABLE",
+      "original_excerpt": "Case C-001: status closed on 2026-09-03.",
+      "fields": {
+        "case_ref": "C-001",
+        "document_id": "DOC-CASE-2026",
+        "entity_id": "RO-DEMO-48219370",
+        "excerpt": "Case C-001: status closed on 2026-09-03.",
+        "published_at": "2026-09-03T10:00:00Z",
+        "status": "CLOSED",
+        "status_date": "2026-09-03",
+        "tool_id": "legal_case_status_lookup"
+      },
+      "authenticity_verification": "NOT_VERIFIED",
+      "authorized_for_case": true,
+      "untrusted_instruction_detected": false
+    },
+    {
+      "evidence_id": "EVD-003",
+      "case_id": "CASE-DEMO-001",
+      "source_type": "AUTHORIZED_MCP_FIXTURE",
+      "source_ref": "demo://documents",
+      "tool_receipt_id": "CALL-004",
+      "document_id": "DOC-CASE-2026",
+      "entity_id": null,
+      "published_at": null,
+      "retrieved_at": "2026-10-29T07:05:05Z",
+      "content_sha256": "654db60a17c6cbd1026b9e5b7e1a691102845f7256eb98ad92ba37159e688146",
+      "data_categories": [
+        "DOCUMENT_METADATA"
+      ],
+      "status": "AVAILABLE",
+      "original_excerpt": "trusted demo metadata matched (simulated)",
+      "fields": {
+        "document_id": "DOC-CASE-2026",
+        "note": "trusted demo metadata matched (simulated)",
+        "result": "MATCH",
+        "tool_id": "document_signature_check"
+      },
+      "authenticity_verification": "NOT_VERIFIED",
+      "authorized_for_case": true,
+      "untrusted_instruction_detected": false
+    }
+  ],
+  "human_signoffs": [
+    {
+      "signoff_id": "SIGNOFF-001",
+      "case_id": "CASE-DEMO-001",
+      "decision": "SIGN_OFF",
+      "reviewer_id": "demo-reviewer-01",
+      "reviewer_role": "BANK_CASE_REVIEWER",
+      "acknowledged_unresolved": false,
+      "note": "Findings reviewed; any banking decision is separate.",
+      "decided_at": "2026-10-29T07:05:05Z",
+      "banking_decision_separate": true
+    }
+  ],
+  "plan_ids": [
+    "PLAN-CASE-DEMO-001-v1",
+    "PLAN-CASE-DEMO-001-v2",
+    "PLAN-CASE-DEMO-001-v3"
+  ],
+  "preflight_ids": [
+    "PREF-001",
+    "PREF-002",
+    "PREF-003"
+  ],
+  "approval_ids": [
+    "APR-001",
+    "APR-002",
+    "APR-003"
+  ],
+  "tool_receipt_ids": [
+    "CALL-001",
+    "CALL-002",
+    "CALL-003",
+    "CALL-004"
+  ],
+  "denied_tool_receipt_ids": [
+    "CALL-001"
+  ],
+  "finding_ids": [
+    "FND-CL-001",
+    "FND-CL-002"
+  ],
+  "human_signoff_id": "SIGNOFF-001",
+  "effective_policy_version": "demo-policy-2026-10-28-v2",
+  "legal_reference_snapshot": "eu-ai-act-2026-07-27",
+  "ai_act_relevance": {
+    "system": "SIMULATED-BANK-AGENT",
+    "version": "demo-1.0",
+    "risk_classification": "UNCONFIRMED",
+    "provider_deployer_role": "UNCONFIRMED",
+    "article_evidence_map": [
+      {
+        "article": "Art. 12 logging",
+        "evidence": "event ledger (hash-chained)",
+        "status": "NEEDS_LEGAL_CONFIRMATION"
+      },
+      {
+        "article": "Art. 14 human oversight",
+        "evidence": "plan approvals/modifications, stop, final sign-off",
+        "status": "NEEDS_LEGAL_CONFIRMATION"
+      },
+      {
+        "article": "Art. 26 deployer duties",
+        "evidence": "reviewer actions, input relevance (claim-level checks)",
+        "status": "NEEDS_LEGAL_CONFIRMATION"
+      }
+    ]
+  },
+  "known_trace_gaps": [
+    "Original agent execution trace: PARTIALLY_CAPTURED"
+  ],
+  "open_issues": [
+    {
+      "claim_id": "CL-002",
+      "verdict": "CONTRADICTED",
+      "reason": "demo://licensed-legal-registry: case C-001 is CLOSED since 2026-09-03; the claim says OPEN. The older source supports only the historical claim."
+    }
+  ],
+  "llm": "mock",
+  "events": [
+    {
+      "event_id": "EVT-001",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "CASE_RECEIVED",
+      "actor_type": "AI_AGENT",
+      "actor_id": "SIMULATED-BANK-AGENT",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "Case received; finding sha256 d4b491ff18a8…; trace PARTIALLY_CAPTURED",
+      "payload_refs": [
+        "EVD-OLD-ARTICLE"
+      ],
+      "previous_event_hash": "genesis",
+      "event_hash": "79f1e7dba8f7ff3789a866f54868f320a58dba07ab466029969e2e7c1f5c1b58"
+    },
+    {
+      "event_id": "EVT-002",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "CLAIMS_ASSESSED",
+      "actor_type": "AI_AGENT",
+      "actor_id": "planner (mock)",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "2 claims, 3 gaps",
+      "payload_refs": [
+        "CL-001",
+        "CL-002"
+      ],
+      "previous_event_hash": "79f1e7dba8f7ff3789a866f54868f320a58dba07ab466029969e2e7c1f5c1b58",
+      "event_hash": "aa9138d6a77cc0a2a5ec2b08c7f4ca461e051386954a05f43a886613276cd331"
+    },
+    {
+      "event_id": "EVT-003",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "SYSTEM",
+      "actor_id": "orchestrator",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "RECEIVED -> ASSESSED",
+      "payload_refs": [],
+      "previous_event_hash": "aa9138d6a77cc0a2a5ec2b08c7f4ca461e051386954a05f43a886613276cd331",
+      "event_hash": "a392e10c572887d7a80a0e1643576b528421541958ac444544462c18700a9354"
+    },
+    {
+      "event_id": "EVT-004",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "SYSTEM",
+      "actor_id": "orchestrator",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "ASSESSED -> PLAN_DRAFTED: PLAN-CASE-DEMO-001-v1",
+      "payload_refs": [],
+      "previous_event_hash": "a392e10c572887d7a80a0e1643576b528421541958ac444544462c18700a9354",
+      "event_hash": "407f858a89b526cb2734921c6f42fffefb0e38f738036255c96d58810ba778cc"
+    },
+    {
+      "event_id": "EVT-005",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "PLAN_PROPOSED",
+      "actor_type": "AI_AGENT",
+      "actor_id": "INVESTIGATION_AGENT (mock)",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "v1 hash 50bf6b5c63bd…: company_registry_lookup, legal_case_status_lookup, unrestricted_web_search",
+      "payload_refs": [
+        "PLAN-CASE-DEMO-001-v1"
+      ],
+      "previous_event_hash": "407f858a89b526cb2734921c6f42fffefb0e38f738036255c96d58810ba778cc",
+      "event_hash": "070102dc29d415dd0cb76705d7b1b2c65da88fb28072cefc5eb239862a523f90"
+    },
+    {
+      "event_id": "EVT-006",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "PREFLIGHT_COMPLETED",
+      "actor_type": "SYSTEM",
+      "actor_id": "policy-preflight",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "BLOCKED (demo-policy-2026-10-28-v2)",
+      "payload_refs": [
+        "PREF-001",
+        "PLAN-CASE-DEMO-001-v1"
+      ],
+      "previous_event_hash": "070102dc29d415dd0cb76705d7b1b2c65da88fb28072cefc5eb239862a523f90",
+      "event_hash": "8b8209a329ed1467016a8b1d8d14d06a50047aa3f640e86764026b89b8fc342b"
+    },
+    {
+      "event_id": "EVT-007",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "SYSTEM",
+      "actor_id": "orchestrator",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "PLAN_DRAFTED -> PREFLIGHT_BLOCKED: BLOCKED",
+      "payload_refs": [
+        "PREF-001"
+      ],
+      "previous_event_hash": "8b8209a329ed1467016a8b1d8d14d06a50047aa3f640e86764026b89b8fc342b",
+      "event_hash": "eab1a6c1b64d9c99669fa5d1a69e6ceeee6b7b8e776b0bf75a6c1ed623d3f99a"
+    },
+    {
+      "event_id": "EVT-008",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "PLAN_MODIFY",
+      "actor_type": "HUMAN",
+      "actor_id": "demo-reviewer-01",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "PLAN-CASE-DEMO-001-v1: No open websites",
+      "payload_refs": [
+        "APR-001",
+        "PLAN-CASE-DEMO-001-v1"
+      ],
+      "previous_event_hash": "eab1a6c1b64d9c99669fa5d1a69e6ceeee6b7b8e776b0bf75a6c1ed623d3f99a",
+      "event_hash": "ebbb033598b3ee984b2f36b0da133e5c08f325aff3166a8cc9ca12062817f8c5"
+    },
+    {
+      "event_id": "EVT-009",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "SYSTEM",
+      "actor_id": "orchestrator",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "PREFLIGHT_BLOCKED -> PLAN_DRAFTED: PLAN-CASE-DEMO-001-v2",
+      "payload_refs": [],
+      "previous_event_hash": "ebbb033598b3ee984b2f36b0da133e5c08f325aff3166a8cc9ca12062817f8c5",
+      "event_hash": "81e79de954b308e18f17352c2f0575b9fea48deb517043c74f5c3c49df1f1b11"
+    },
+    {
+      "event_id": "EVT-010",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "PLAN_PROPOSED",
+      "actor_type": "AI_AGENT",
+      "actor_id": "INVESTIGATION_AGENT (mock)",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "v2 hash b9be2f93cbc6…: company_registry_lookup, legal_case_status_lookup",
+      "payload_refs": [
+        "PLAN-CASE-DEMO-001-v2"
+      ],
+      "previous_event_hash": "81e79de954b308e18f17352c2f0575b9fea48deb517043c74f5c3c49df1f1b11",
+      "event_hash": "cb453fab5ba4b6eed0e20e316db119a54bb37bf4f2707227082b96ee43df30e1"
+    },
+    {
+      "event_id": "EVT-011",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "PREFLIGHT_COMPLETED",
+      "actor_type": "SYSTEM",
+      "actor_id": "policy-preflight",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "ALLOWED_WITH_CONDITIONS (demo-policy-2026-10-28-v2)",
+      "payload_refs": [
+        "PREF-002",
+        "PLAN-CASE-DEMO-001-v2"
+      ],
+      "previous_event_hash": "cb453fab5ba4b6eed0e20e316db119a54bb37bf4f2707227082b96ee43df30e1",
+      "event_hash": "1cb4948046e1f221b2f9f012f6409bf16f950fc1e2460a3aceb5637c3cc46bf7"
+    },
+    {
+      "event_id": "EVT-012",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "SYSTEM",
+      "actor_id": "orchestrator",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "PLAN_DRAFTED -> AWAITING_PLAN_APPROVAL: ALLOWED_WITH_CONDITIONS",
+      "payload_refs": [
+        "PREF-002"
+      ],
+      "previous_event_hash": "1cb4948046e1f221b2f9f012f6409bf16f950fc1e2460a3aceb5637c3cc46bf7",
+      "event_hash": "5dbfab6eb29369f4733e82c1f9d2833e9facc85828f3a7c3d261f917b56f0cdd"
+    },
+    {
+      "event_id": "EVT-013",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "PLAN_APPROVED",
+      "actor_type": "HUMAN",
+      "actor_id": "demo-reviewer-01",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "PLAN-CASE-DEMO-001-v2 hash b9be2f93cbc6… approved",
+      "payload_refs": [
+        "APR-002",
+        "PLAN-CASE-DEMO-001-v2"
+      ],
+      "previous_event_hash": "5dbfab6eb29369f4733e82c1f9d2833e9facc85828f3a7c3d261f917b56f0cdd",
+      "event_hash": "c63b2abdcf54ed163ec1a7f05d0670498e1bad1f448d8f78d4818d856e44edf2"
+    },
+    {
+      "event_id": "EVT-014",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "HUMAN",
+      "actor_id": "demo-reviewer-01",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "AWAITING_PLAN_APPROVAL -> APPROVED",
+      "payload_refs": [],
+      "previous_event_hash": "c63b2abdcf54ed163ec1a7f05d0670498e1bad1f448d8f78d4818d856e44edf2",
+      "event_hash": "55cc29831fa5eb3c5657fb1f64b7e5944823d8152812ef4f4964648bd2084c6a"
+    },
+    {
+      "event_id": "EVT-015",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "TOOL_DENIED",
+      "actor_type": "SYSTEM",
+      "actor_id": "tool-proxy",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "unrestricted_web_search denied: unrestricted_web_search is forbidden by policy (hard deny, cannot be approved); unrestricted_web_search is not an enabled catalogue tool; Tool unrestricted_web_search does not match approved step S1 (company_registry_lookup); Arguments differ from the approved step; unrestricted_web_search was excluded by the reviewer",
+      "payload_refs": [
+        "CALL-001"
+      ],
+      "previous_event_hash": "55cc29831fa5eb3c5657fb1f64b7e5944823d8152812ef4f4964648bd2084c6a",
+      "event_hash": "a85bfa6f0bf9228b73778730f2c1a4d862530f7e6de82e6efd4e7584c1e75eaa"
+    },
+    {
+      "event_id": "EVT-016",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "SYSTEM",
+      "actor_id": "orchestrator",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "APPROVED -> EXECUTING",
+      "payload_refs": [],
+      "previous_event_hash": "a85bfa6f0bf9228b73778730f2c1a4d862530f7e6de82e6efd4e7584c1e75eaa",
+      "event_hash": "fbd693eea272d973ad74d09cfa9d79df1108518b48d1a1e4fc642d2da8c92cc8"
+    },
+    {
+      "event_id": "EVT-017",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "TOOL_INVOKED",
+      "actor_type": "SYSTEM",
+      "actor_id": "tool-proxy",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "company_registry_lookup({\"company_id\":\"RO-DEMO-48219370\"}) -> EXECUTED",
+      "payload_refs": [
+        "CALL-002",
+        "EVD-001"
+      ],
+      "previous_event_hash": "fbd693eea272d973ad74d09cfa9d79df1108518b48d1a1e4fc642d2da8c92cc8",
+      "event_hash": "dd79f51fe4d923c2f905859f477ebf609eeb001e04e9e63a9f94e6ff029a5955"
+    },
+    {
+      "event_id": "EVT-018",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "TOOL_INVOKED",
+      "actor_type": "SYSTEM",
+      "actor_id": "tool-proxy",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "legal_case_status_lookup({\"case_ref\":\"C-001\",\"company_id\":\"RO-DEMO-48219370\"}) -> EXECUTED",
+      "payload_refs": [
+        "CALL-003",
+        "EVD-002"
+      ],
+      "previous_event_hash": "dd79f51fe4d923c2f905859f477ebf609eeb001e04e9e63a9f94e6ff029a5955",
+      "event_hash": "ba1e3d71708de458440f43e3bcd4783e8969262fbe314843432e14324e258ad4"
+    },
+    {
+      "event_id": "EVT-019",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "FINDING_UPDATED",
+      "actor_type": "AI_AGENT",
+      "actor_id": "verification-engine",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "CL-001: SUPPORTED",
+      "payload_refs": [
+        "FND-CL-001",
+        "EVD-OLD-ARTICLE",
+        "EVD-001"
+      ],
+      "previous_event_hash": "ba1e3d71708de458440f43e3bcd4783e8969262fbe314843432e14324e258ad4",
+      "event_hash": "b968730ecfe066781b01a246fc6097de8e1a75c88a079ee5c08d8360116af64d"
+    },
+    {
+      "event_id": "EVT-020",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "FINDING_UPDATED",
+      "actor_type": "AI_AGENT",
+      "actor_id": "verification-engine",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "CL-002: CONTRADICTED",
+      "payload_refs": [
+        "FND-CL-002",
+        "EVD-OLD-ARTICLE",
+        "EVD-002"
+      ],
+      "previous_event_hash": "b968730ecfe066781b01a246fc6097de8e1a75c88a079ee5c08d8360116af64d",
+      "event_hash": "529166a95ae483fc8c3eae11785fee8077de195c9ce5b40fa3187618f698b88a"
+    },
+    {
+      "event_id": "EVT-021",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "SYSTEM",
+      "actor_id": "orchestrator",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "EXECUTING -> FINDINGS_READY: CL-001=SUPPORTED, CL-002=CONTRADICTED",
+      "payload_refs": [],
+      "previous_event_hash": "529166a95ae483fc8c3eae11785fee8077de195c9ce5b40fa3187618f698b88a",
+      "event_hash": "79536f6aba75fb9fa3654248b73b3691860a3bbafdf7d9ca1137aaed9d8965ce"
+    },
+    {
+      "event_id": "EVT-022",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "AI_AGENT",
+      "actor_id": "agent:assure-v1",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "FINDINGS_READY -> REPLAN_REQUIRED: new scope needed: document_signature_check:DOC-CASE-2026",
+      "payload_refs": [],
+      "previous_event_hash": "79536f6aba75fb9fa3654248b73b3691860a3bbafdf7d9ca1137aaed9d8965ce",
+      "event_hash": "382c965ce8678545c093bbf06189d1cb5bc8687560c26eed03c3a932b64ed931"
+    },
+    {
+      "event_id": "EVT-023",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "SYSTEM",
+      "actor_id": "orchestrator",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "REPLAN_REQUIRED -> PLAN_DRAFTED: PLAN-CASE-DEMO-001-v3",
+      "payload_refs": [],
+      "previous_event_hash": "382c965ce8678545c093bbf06189d1cb5bc8687560c26eed03c3a932b64ed931",
+      "event_hash": "4a67415698c4735743da9ab2a24ca6440153efe75ef706d4b0b1a99109a2913d"
+    },
+    {
+      "event_id": "EVT-024",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "PLAN_PROPOSED",
+      "actor_type": "AI_AGENT",
+      "actor_id": "INVESTIGATION_AGENT (mock)",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "v3 hash c384de03a6e0…: document_signature_check",
+      "payload_refs": [
+        "PLAN-CASE-DEMO-001-v3"
+      ],
+      "previous_event_hash": "4a67415698c4735743da9ab2a24ca6440153efe75ef706d4b0b1a99109a2913d",
+      "event_hash": "4bf934b99184af856be52ac4e73029faee920cef5bf7996932735e9eba4116f3"
+    },
+    {
+      "event_id": "EVT-025",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "PREFLIGHT_COMPLETED",
+      "actor_type": "SYSTEM",
+      "actor_id": "policy-preflight",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "ALLOWED_WITH_CONDITIONS (demo-policy-2026-10-28-v2)",
+      "payload_refs": [
+        "PREF-003",
+        "PLAN-CASE-DEMO-001-v3"
+      ],
+      "previous_event_hash": "4bf934b99184af856be52ac4e73029faee920cef5bf7996932735e9eba4116f3",
+      "event_hash": "a1aab29cfd3a55c4363839af4c1d6602e9b6ceae50216630a4c6107242debab8"
+    },
+    {
+      "event_id": "EVT-026",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "SYSTEM",
+      "actor_id": "orchestrator",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "PLAN_DRAFTED -> AWAITING_PLAN_APPROVAL: ALLOWED_WITH_CONDITIONS",
+      "payload_refs": [
+        "PREF-003"
+      ],
+      "previous_event_hash": "a1aab29cfd3a55c4363839af4c1d6602e9b6ceae50216630a4c6107242debab8",
+      "event_hash": "328aa895310af4d3c56abd012608acad24211f373b20f756586265d76845727f"
+    },
+    {
+      "event_id": "EVT-027",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "PLAN_APPROVED",
+      "actor_type": "HUMAN",
+      "actor_id": "demo-reviewer-01",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "PLAN-CASE-DEMO-001-v3 hash c384de03a6e0… approved",
+      "payload_refs": [
+        "APR-003",
+        "PLAN-CASE-DEMO-001-v3"
+      ],
+      "previous_event_hash": "328aa895310af4d3c56abd012608acad24211f373b20f756586265d76845727f",
+      "event_hash": "847bbd34eb3a74077b851a4f0ba7f4960481888010290f6ee24657cfd9051637"
+    },
+    {
+      "event_id": "EVT-028",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "HUMAN",
+      "actor_id": "demo-reviewer-01",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "AWAITING_PLAN_APPROVAL -> APPROVED",
+      "payload_refs": [],
+      "previous_event_hash": "847bbd34eb3a74077b851a4f0ba7f4960481888010290f6ee24657cfd9051637",
+      "event_hash": "e8ae9d7cdfe5d7587b971cd21741da4134ac34973848bd46dff8075861030fe8"
+    },
+    {
+      "event_id": "EVT-029",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "SYSTEM",
+      "actor_id": "orchestrator",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "APPROVED -> EXECUTING",
+      "payload_refs": [],
+      "previous_event_hash": "e8ae9d7cdfe5d7587b971cd21741da4134ac34973848bd46dff8075861030fe8",
+      "event_hash": "70c1ef7d4b6226483286ca2c58ef6b54156e5446d54920da5c5d34c0340a0a13"
+    },
+    {
+      "event_id": "EVT-030",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "TOOL_INVOKED",
+      "actor_type": "SYSTEM",
+      "actor_id": "tool-proxy",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "document_signature_check({\"document_id\":\"DOC-CASE-2026\"}) -> EXECUTED",
+      "payload_refs": [
+        "CALL-004",
+        "EVD-003"
+      ],
+      "previous_event_hash": "70c1ef7d4b6226483286ca2c58ef6b54156e5446d54920da5c5d34c0340a0a13",
+      "event_hash": "101102daf11d988719706d0259bf069555a65ea15bc2c17fc954e716556eee62"
+    },
+    {
+      "event_id": "EVT-031",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "SYSTEM",
+      "actor_id": "orchestrator",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "EXECUTING -> FINDINGS_READY: CL-001=SUPPORTED, CL-002=CONTRADICTED",
+      "payload_refs": [],
+      "previous_event_hash": "101102daf11d988719706d0259bf069555a65ea15bc2c17fc954e716556eee62",
+      "event_hash": "b0f6a5ae62933131a1fad6acbffd003bd587e6ecc4078d74378b6eba471c1dd4"
+    },
+    {
+      "event_id": "EVT-032",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "SYSTEM",
+      "actor_id": "orchestrator",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "FINDINGS_READY -> AWAITING_FINAL_REVIEW",
+      "payload_refs": [],
+      "previous_event_hash": "b0f6a5ae62933131a1fad6acbffd003bd587e6ecc4078d74378b6eba471c1dd4",
+      "event_hash": "b2e9cfa0b366d363ba25ffd8bde55ec67c54241a16d1e944cdf986c3132e7869"
+    },
+    {
+      "event_id": "EVT-033",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "FINAL_SIGN_OFF",
+      "actor_type": "HUMAN",
+      "actor_id": "demo-reviewer-01",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "Findings reviewed; any banking decision is separate.",
+      "payload_refs": [
+        "SIGNOFF-001"
+      ],
+      "previous_event_hash": "b2e9cfa0b366d363ba25ffd8bde55ec67c54241a16d1e944cdf986c3132e7869",
+      "event_hash": "c98baf4e5d1e2bafb5a4e80867fe1e4ff68c73cb0de85a419dcb66474acad3ab"
+    },
+    {
+      "event_id": "EVT-034",
+      "case_id": "CASE-DEMO-001",
+      "event_type": "STATE_CHANGED",
+      "actor_type": "HUMAN",
+      "actor_id": "demo-reviewer-01",
+      "timestamp": "2026-10-29T07:05:05Z",
+      "summary": "AWAITING_FINAL_REVIEW -> CLOSED_WITH_ISSUES: sign-off (not a banking or credit decision)",
+      "payload_refs": [
+        "SIGNOFF-001"
+      ],
+      "previous_event_hash": "c98baf4e5d1e2bafb5a4e80867fe1e4ff68c73cb0de85a419dcb66474acad3ab",
+      "event_hash": "7ffb8f653c60e3303406137e3fa6665f50aa97bc0f13d59c5bb8536635786f0f"
+    }
+  ],
+  "ledger_verification": {
+    "ok": true,
+    "entries": 34,
+    "first_bad_index": null
+  },
+  "legal_assessment_disclaimer": "Prepared as supporting governance evidence; not a certification or legal opinion. Synthetic demo data and demo policies only. The sign-off is not a banking or credit decision.",
+  "generated_at": "2026-10-29T07:05:05Z",
+  "pack_sha256": "2206c45a3125f8453b0e4ff94846ba3b23064f89fc23e12ac9f5775c1b7c3494"
+}

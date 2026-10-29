@@ -1,0 +1,245 @@
+# SYNTHETIC demo policy. Not a Raiffeisen policy. A real policy owner must approve any production rules.
+policy_version: demo-policy-2026-10-28-v2
+legal_reference_snapshot: eu-ai-act-2026-07-27
+allowed_case_purposes:
+  - corporate_due_diligence_demo
+  - credit_file_review_demo
+allowed_tools:
+  company_registry_lookup:
+    actions: [READ]
+    source: demo://company-registry
+    categories: [CORPORATE_PUBLIC]
+    rule_id: POL-TOOL-001
+  legal_case_status_lookup:
+    actions: [READ]
+    source: demo://licensed-legal-registry
+    categories: [CORPORATE_LEGAL]
+    rule_id: POL-TOOL-001
+    conditions: ["Read-only access", "Exact company and case identifiers only"]
+  document_metadata_lookup:
+    actions: [READ]
+    source: demo://documents
+    categories: [DOCUMENT_METADATA]
+    rule_id: POL-TOOL-001
+  document_signature_check:
+    actions: [READ]
+    source: demo://documents
+    categories: [DOCUMENT_METADATA]
+    rule_id: POL-TOOL-001
+    conditions: ["Simulated fixture signature check; not a qualified e-signature validation"]
+  financial_report_lookup:
+    actions: [READ]
+    source: demo://financial-reports
+    categories: [CORPORATE_FINANCIAL]
+    rule_id: POL-TOOL-001
+  tax_status_lookup:
+    actions: [READ]
+    source: demo://tax-registry
+    categories: [CORPORATE_TAX]
+    rule_id: POL-TOOL-001
+    conditions: ["Read-only; legal-entity tax status only"]
+  # Retail loan file (Maria, scenarios S07/S08): documents, the bank's own records, one consent-bound external source.
+  doc_read:
+    actions: [READ]
+    source: demo://document-extractor
+    categories: [PERSONAL_DOCUMENT_FIELDS]
+    rule_id: POL-TOOL-001
+    conditions: ["Typed fields from the quarantined extractor only; CNP and IBAN masked to the last 4 characters; special-category rows (GDPR Art. 9) removed from the analyst view"]
+  consent_lookup:
+    actions: [READ]
+    source: demo://consent-register
+    categories: [CONSENT_RECORD]
+    rule_id: POL-TOOL-001
+  application_status_lookup:
+    actions: [READ]
+    source: demo://loan-applications
+    categories: [APPLICATION_STATUS]
+    rule_id: POL-TOOL-001
+  anaf_income_query:
+    actions: [READ]
+    source: demo://anaf-income
+    categories: [PERSONAL_INCOME]
+    rule_id: POL-TOOL-001
+    requires_basis: { kind: consent, source: ANAF }
+    conditions: ["Individual income data only under this client's valid ANAF consent for this application (SRC-ANAF rules)"]
+deny_tools:
+  unrestricted_web_search: POL-DATA-001
+  customer_scoring_write: POL-ACT-001
+  external_email_send: POL-ACT-001
+forbidden_data_categories:
+  PERSONAL_DATA: POL-DATA-002
+  SPECIAL_CATEGORY: POL-DATA-003
+forbid_real_personal_data: true
+max_approved_plans: 3
+max_total_tool_calls: 8
+approval_ttl_minutes: 30
+
+# Result filter (gate spec §12): applied by the tool proxy to every allowed result before it is stored or shown.
+result_filter:
+  mask_field_suffixes: [cnp, iban]
+  mask_keep_last: 4
+  special_category_keywords: [farmaci, pharmac, clinic, spital, hospital, medic, biseric, church, parohi, partid, sindicat, moschee, sinagog]
+  row_fields: [rows, transactions]
+
+# Source-permission rules (gate spec §5 steps 9 and 11, §6). Conditions are computed in
+# backend/security/source_rules.py; this block holds the parameters.
+source_rules:
+  working_days: { country: RO, signing_day_counts: false, inclusive: true }   # counting convention [team]
+  anaf_consent_window_days: 5                 # draft ANAF order reported 12 Sep 2026 [draft]
+  anaf_window_rule_effective_from: "2026-09-12"
+  consent_sources_with_window: [ANAF]
+  closed_application_statuses: [withdrawn, rejected, closed]
+  purposes_allowed_after_closure: [deletion, legal_obligation]
+
+rules:
+  POL-TOOL-001:
+    title: Tool is in the approved read-only catalogue for this purpose
+    source_uri: bank-policy://demo/tool-catalogue/v1
+    authority_type: INTERNAL_POLICY
+    effect: ALLOW
+  POL-TOOL-002:
+    title: Unknown tool (not in the catalogue) is denied
+    source_uri: bank-policy://demo/tool-catalogue/v1
+    authority_type: INTERNAL_POLICY
+    effect: DENY
+  POL-DATA-001:
+    title: No unrestricted people-search or open web search
+    source_uri: bank-policy://demo/data-access/v3
+    authority_type: INTERNAL_POLICY
+    effect: DENY
+    legal_refs: ["GDPR Art. 5(1)(b),(c) purpose limitation and minimisation", "GDPR Art. 6 lawful basis"]
+  POL-DATA-002:
+    title: No real personal data in the MVP
+    source_uri: bank-policy://demo/data-access/v3
+    authority_type: INTERNAL_POLICY
+    effect: DENY
+    legal_refs: ["GDPR Art. 6 lawful basis must be recorded by the bank"]
+  POL-DATA-003:
+    title: Special-category data blocked by default
+    source_uri: bank-policy://demo/data-access/v3
+    authority_type: INTERNAL_POLICY
+    effect: DENY
+    legal_refs: ["GDPR Art. 9"]
+  POL-ACT-001:
+    title: No effectful or customer-facing action (write, score, send)
+    source_uri: bank-policy://demo/actions/v1
+    authority_type: INTERNAL_POLICY
+    effect: DENY
+    legal_refs: ["GDPR Art. 22", "Product scope: read-only MVP"]
+  POL-PURPOSE-001:
+    title: Case purpose must be an approved business purpose
+    source_uri: bank-policy://demo/purposes/v1
+    authority_type: INTERNAL_POLICY
+    effect: REVIEW
+  POL-BUDGET-001:
+    title: Plan and call budgets (max 3 approved plans, 8 tool calls per case)
+    source_uri: bank-policy://demo/limits/v1
+    authority_type: INTERNAL_POLICY
+    effect: DENY
+  POL-SRC-001:
+    title: Tool source and data categories must match the catalogue entry
+    source_uri: bank-policy://demo/tool-catalogue/v1
+    authority_type: INTERNAL_POLICY
+    effect: DENY
+  POL-SCOPE-001:
+    title: A plan must contain at least one permitted read-only step
+    source_uri: bank-policy://demo/tool-catalogue/v1
+    authority_type: INTERNAL_POLICY
+    effect: DENY
+  POL-DEMO-SYNTHETIC-ONLY:
+    title: Synthetic legal-entity fixtures only
+    source_uri: bank-policy://demo/data-access/v3
+    authority_type: INTERNAL_POLICY
+    effect: ALLOW
+  # --- source permission (SRC-*): who may query which source about this client, now.
+  # preflight: CONDITION = plan stays approvable, the step is named and will be refused at run time;
+  #            BLOCK = plan cannot be approved; REVIEW = compliance must decide (LEGAL_REVIEW_REQUIRED).
+  SRC-ANAF-001:
+    title: ANAF individual income data needs the client's consent on record
+    source_uri: law://ro/opanaf-146-2022
+    authority_type: LAW
+    effect: DENY
+    preflight: CONDITION
+    next_step: request_consent
+    overridable: false
+    label: public
+    legal_refs: ["OPANAF 146/2022: consent required, the bank archives consents", "ANSPDCP ruling on Vreau Credit, 25 May 2026"]
+    explain_ro: "Datele de venit ANAF se pot interoga doar cu acordul clientului înregistrat. Solicitați acordul."
+  SRC-ANAF-002:
+    title: ANAF consent lapsed (5 Romanian working days from signing, signing day excluded)
+    source_uri: draft://ro/anaf-order-spv-consent-2026-09
+    authority_type: DRAFT_LAW
+    effect: DENY
+    preflight: CONDITION
+    next_step: request_consent
+    overridable: false
+    label: draft
+    effective_from: "2026-09-12"
+    legal_refs: ["Draft ANAF order reported 12 Sep 2026 (Economedia, Financiarul): consent in SPV, per purpose, valid 5 working days [draft]", "Counting convention is the team's (source_rules.working_days)"]
+    explain_ro: "Acordul ANAF {consent.id} a expirat la {consent.valid_until} (5 zile lucrătoare de la {consent.signed_at}). Solicitați un nou acord."
+  SRC-ANAF-003:
+    title: Consent does not cover this client, source or application
+    source_uri: law://eu/gdpr/art-6-1-a
+    authority_type: LAW
+    effect: DENY
+    preflight: CONDITION
+    next_step: request_consent
+    overridable: false
+    label: public
+    legal_refs: ["GDPR Art. 6(1)(a), Art. 7", "Draft ANAF order: consent per purpose [draft]"]
+    explain_ro: "Acordul nu acoperă această interogare (alt client, altă sursă sau altă cerere)."
+  SRC-ANAF-004:
+    title: Consent withdrawn, invalidated or expired
+    source_uri: law://eu/gdpr/art-7-3
+    authority_type: LAW
+    effect: DENY
+    preflight: CONDITION
+    next_step: request_consent
+    overridable: false
+    label: public
+    legal_refs: ["GDPR Art. 7(3)"]
+    explain_ro: "Acordul a fost retras sau nu mai este valabil."
+  SRC-STATUS-001:
+    title: No new processing of a withdrawn, rejected or closed application (deletion and legal obligations only)
+    source_uri: regulator://ro/anspdcp/2024-11-20
+    authority_type: REGULATOR
+    effect: DENY
+    preflight: BLOCK
+    next_step: none
+    overridable: false
+    label: public
+    legal_refs: ["ANSPDCP press release, 20 Nov 2024: fine for the use of a withdrawn credit application", "GDPR Art. 5(1)(b),(e)"]
+    explain_ro: "Cererea de credit a fost retrasă; dosarul nu mai poate fi prelucrat decât pentru ștergere sau obligații legale."
+  SRC-BASIS-001:
+    title: Personal-data query without a legal-basis reference goes to compliance
+    source_uri: law://eu/gdpr/art-6
+    authority_type: LAW
+    effect: DENY
+    preflight: REVIEW
+    next_step: human_approval
+    overridable: false
+    label: public
+    legal_refs: ["GDPR Art. 6", "Build spec 03 §4: a missing lawful basis is not resolved by an LLM"]
+    explain_ro: "Interogarea de date personale nu indică un temei legal; decide conformitatea."
+  SRC-HOLD-001:
+    title: A fact needed for the decision could not be read; the call is held, never allowed
+    source_uri: bank-policy://demo/gate/v1
+    authority_type: INTERNAL_POLICY
+    effect: HOLD
+    preflight: REVIEW
+    next_step: retry_later
+    overridable: false
+    label: team
+    legal_refs: ["Gate principle: hold is never allow"]
+    explain_ro: "Registrul nu a răspuns; apelul este reținut, nu permis."
+
+ai_act_notes:
+  - article: "Art. 12 logging"
+    status: NEEDS_LEGAL_CONFIRMATION
+    note: "Event ledger captures per-case events; applicability depends on the verified system's classification."
+  - article: "Art. 14 human oversight"
+    status: NEEDS_LEGAL_CONFIRMATION
+    note: "Plan approval, reject/modify, stop and final sign-off are recorded."
+  - article: "Art. 26 deployer duties"
+    status: NEEDS_LEGAL_CONFIRMATION
+    note: "Supporting evidence only; deployer compliance is not certified by this tool."
