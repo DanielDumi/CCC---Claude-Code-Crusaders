@@ -3,7 +3,7 @@
 **Checks what a bank's AI agent claims, before anyone relies on it.**
 Team **CCC — Claude Code Crusaders** · NEXXT AI Hackathon 2026 · Raiffeisen Bank challenge "AI for Operational Efficiency" · synthetic data only.
 
-**▶ Live demo: [ccc-claude-code-crusaders.onrender.com](https://ccc-claude-code-crusaders.onrender.com/#/case/S01/J1)** (opens scenario S01). Nothing to install; see [Using the live demo](#using-the-live-demo) below.
+**▶ Live demo: [ccc-claude-code-crusaders.onrender.com](https://ccc-claude-code-crusaders.onrender.com/#/case/S04/J1)** (opens scenario S04, conflicting financial report versions). Nothing to install; see [Using the live demo](#using-the-live-demo) below.
 
 Banks already run AI agents that read documents and call tools. Before a person can rely on what such an agent says, someone has to check, by hand, whether each statement is backed by an original source, is about the right customer, is still current, and whether the bank was even allowed to look it up. Agent Assurance does that investigation for the reviewer, inside limits a person sets:
 
@@ -21,7 +21,7 @@ Banks already run AI agents that read documents and call tools. Before a person 
 
 ## Using the live demo
 
-- **Link:** <https://ccc-claude-code-crusaders.onrender.com/#/case/S01/J1>. Start page: <https://ccc-claude-code-crusaders.onrender.com/>; API docs: <https://ccc-claude-code-crusaders.onrender.com/docs>.
+- **Link:** <https://ccc-claude-code-crusaders.onrender.com/#/case/S04/J1>. Start page: <https://ccc-claude-code-crusaders.onrender.com/>; API docs: <https://ccc-claude-code-crusaders.onrender.com/docs>.
 - **First visit can take up to a minute:** the free hosting plan puts the app to sleep when nobody uses it.
 - **The planner uses Claude Haiku on AWS Bedrock.** The key is a server-side setting on the host: it is not in this repository and never reaches the browser. Check which model is active at [`/demo/info`](https://ccc-claude-code-crusaders.onrender.com/demo/info) (`"llm"`). If the model is unavailable or the spend cap is reached, the app switches to the deterministic planner and says so in the plan card and the log; the verdicts and the gate work the same either way.
 - **State is in memory and shared by everyone using the link,** and it resets when the server restarts. Use **Reset demo** in the sidebar to start a case over.
