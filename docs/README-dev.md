@@ -5,18 +5,17 @@ NEXXT AI Hackathon 2026 · Raiffeisen Bank · synthetic data only.
 
 > Existing banking agents can return plausible findings with missing or outdated evidence. Agent Assurance splits a finding into claims, proposes an investigation plan, runs a deterministic **legal + policy preflight**, asks a person to approve the **exact plan (by hash)**, lets the agent call **only approved read-only MCP tools** through a proxy that fails closed, and produces claim-level verdicts plus a hash-chained **evidence pack**. We don't replace banking agents; we make their output verifiable.
 
-## For teammates: start here
-1. This code is the `agent-assurance/` folder of the **team vault repo** you already cloned. Pull first (Obsidian does it on open), then `cd agent-assurance`.
-2. `python dev.py setup` (installs requirements, creates `.env` in mock mode).
-3. `python dev.py check` must print **CHECK PASSED**. Then `python dev.py run` and click through S01.
-4. Pick your task in **[TASKS.md](TASKS.md)**, work on `main` in small green commits. Rules for you and your AI: **[AGENTS.md](AGENTS.md)** (Claude reads **[CLAUDE.md](CLAUDE.md)** automatically).
+## For developers: start here
+1. `python dev.py setup` (installs requirements, creates `.env` in mock mode).
+2. `python dev.py check` must print **CHECK PASSED**. Then `python dev.py run` and click through S01.
+3. Rules for you and your AI coding agent: **[AGENTS.md](../AGENTS.md)** (Claude reads **[CLAUDE.md](../CLAUDE.md)** automatically). How the code is organised: **[ARCHITECTURE.md](ARCHITECTURE.md)**.
 
 ## Run it (one command each)
 
 ```bash
 python dev.py setup     # pip install + .env (Python 3.10+)
 python dev.py run       # → http://127.0.0.1:8000
-python dev.py test      # 52 tests: functional FUN-01..12, security SEC-01..10, source-permission rules
+python dev.py test      # 69 tests: functional FUN-01..12, security SEC-01..10, source-permission rules
 python dev.py eval      # metrics table, misses first → eval/report.md
 python dev.py bench     # seconds, tokens, cost per case over 3 runs -> eval/bench.md (--llm for a live model)
 python dev.py check     # test + eval, what CI runs on every PR

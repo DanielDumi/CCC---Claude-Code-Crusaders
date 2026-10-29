@@ -167,6 +167,25 @@ Current result (deterministic mode): **0 wrong claims marked SUPPORTED, 26/26 ve
 - The ANAF 5-working-day consent rule comes from a **draft** order (Sep 2026); our counting convention (signing day excluded) is stated in the rules.
 - No measured bank time savings; state is in memory by default (`AA_DB=file.sqlite3` to persist).
 
+## Code documentation
+
+Start with **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** (module map, the life of one case, trust boundaries, where the AI is and isn't). Every folder then has its own README:
+
+| Folder | What it explains |
+|---|---|
+| [backend/](backend/README.md) | How the modules fit together; every HTTP route |
+| [backend/domain/](backend/domain/README.md) | The data contracts and enums (verdicts, preflight statuses, case states) |
+| [backend/workflow/](backend/workflow/README.md) | The investigation loop and the state machine |
+| [backend/agents/](backend/agents/README.md) | The investigation planner and how model answers are validated |
+| [backend/llm/](backend/llm/README.md) | The model adapter: providers, token caps, retries, spend cap |
+| [backend/security/](backend/security/README.md) | Preflight, the gate, Romanian source rules, result filter |
+| [backend/tools/](backend/tools/README.md) | Tool catalogue and the fake read-only MCP server |
+| [backend/evidence/](backend/evidence/README.md) | Verdicts in code and the evidence pack |
+| [backend/storage/](backend/storage/README.md) | SQLite store and the hash-chained ledger |
+| [frontend/](frontend/README.md) | The review UI |
+| [fixtures/](fixtures/README.md) | Scenarios, the demo policy, demo users |
+| [eval/](eval/README.md) · [tests/](tests/README.md) · [ops/](ops/README.md) | Evaluation, the 69 tests, the key check and hosting |
+
 ## Repository layout
 
 ```
