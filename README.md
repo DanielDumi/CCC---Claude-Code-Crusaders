@@ -18,6 +18,7 @@ Banks already run AI agents that read documents and call tools. Before a person 
 > We don't replace the bank's agents. We make their output verifiable, with a human in charge of every new step.
 
 **Pitch deck:** [presentation/ClaudeCodeCrusaders_Presentation.pdf](presentation/ClaudeCodeCrusaders_Presentation.pdf) (13 slides).
+**Presentation support:** [presentation/Agent_Assurance_Presentation_Brief.pdf](presentation/Agent_Assurance_Presentation_Brief.pdf) (19-page product brief: problem, pipeline, demo script, legal link, deliverables).
 
 ## Using the live demo
 
@@ -207,7 +208,7 @@ tests/       69 automated tests
 samples/     sample inputs, API walkthrough, sample evidence pack and report
 docs/        build spec 01-10, gate spec, developer README
 ops/         Bedrock key smoke test
-presentation/ pitch deck (PDF)
+presentation/ pitch deck and presentation brief (PDF)
 dev.py       setup / check / test / eval / bench / run / smoke
 ```
 
